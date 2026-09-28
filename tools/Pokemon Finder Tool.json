@@ -1,0 +1,125 @@
+{
+  "name": "Pokemon Finder Tool",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"name\": \"Pikachu\"\n}"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "35803e62-6248-4719-9e67-9567dc720141",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "url": "=https://pokeapi.co/api/v2/pokemon/{{ $json.name.trim().toLowerCase() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "a70f9a11-972f-4b4a-8ab2-c66d2721786d",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0ef0a00e-7168-4414-9755-31edc62e180b",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "6b99bb28-946b-47c7-af99-c63bfae5b42f",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "7e1193f1-2515-4ce7-bc4e-3ffae26fad57",
+              "name": "sprites.back_default",
+              "value": "={{ $json.sprites.back_default }}",
+              "type": "string"
+            },
+            {
+              "id": "09bb8afa-c269-4755-a68e-8db7d79310fa",
+              "name": "sprites.front_female",
+              "value": "={{ $json.sprites.front_female }}",
+              "type": "string"
+            },
+            {
+              "id": "ef397b5d-16ba-4aea-8b23-d779b9ac8554",
+              "name": "types[0]",
+              "value": "={{ $json.types.map(item=>item.type).map(item => item.name) }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "e69978d6-ae52-4d01-8492-38d5cd34c08c",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "name": "Pikachu"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "2f314e7c-246f-42d2-8ae7-61e41b15a69c",
+  "meta": {
+    "instanceId": "a3dd4c67883e75c68cfebadd471ad6cd09cd83b0dc0ff5b2e792a60600a3222b"
+  },
+  "nodeGroups": [],
+  "id": "F5TVKYdTsWJOgHF8",
+  "tags": []
+}
